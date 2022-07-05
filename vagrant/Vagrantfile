@@ -82,6 +82,9 @@ Vagrant.configure("2") do |config|
         config.vm.network "public_network", ip: "192.168.2.150", bridge: "wlp2s0"
 
         node.vm.provision "setup-docker", type: "shell", :path => "scripts/docker-setup.sh"
+        node.vm.provision "setup-jenkins", :type => "shell", :path => "scripts/runJenkins.sh" do |s|
+          s.args = ["greinvinicios/jenkins-custom:lts", "jenkins-custom"]
+        end
 
         node.vm.hostname = "node0#{i}"
     end
