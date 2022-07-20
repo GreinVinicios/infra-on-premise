@@ -1,14 +1,15 @@
 FROM jenkins/jenkins:lts
 USER root
-RUN apt-get update && apt-get install -y lsb-release
-RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
-  https://download.docker.com/linux/debian/gpg
-RUN echo "deb [arch=$(dpkg --print-architecture) \
-  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
-  https://download.docker.com/linux/debian \
-  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
-RUN apt-get update && apt-get install -y docker-ce-cli
+
+# Docker script
+RUN apt update
+RUN apt install -y curl
+RUN curl -fsSL https://get.docker.com -o get-docker.sh
+RUN sh ./get-docker.sh
+RUN usermod -aG docker jenkins
+
+RUN apt-get install -y uidmap
+
 USER jenkins
-RUN jenkins-plugin-cli --plugins docker-workflow:1.29
-RUN jenkins-plugin-cli --plugins blueocean:1.25.5
-RUN jenkins-plugin-cli --plugins credentials:1139.veb_9579fca_33b_
+
+RUN dockerd-rootless-setuptool.sh install

@@ -10,8 +10,8 @@ JENKINS_IMAGENAME=jenkins-custom
 
 function main(){
   build
-  #run
-  #getPaswd
+  run
+  getPaswd
 }
 
 function build(){
